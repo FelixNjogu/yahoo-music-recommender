@@ -42,4 +42,16 @@ model=als.fit(training)
 Predictions are saved into a valuable called predictions which are used in the next step to evaluate the model.
 predictions=model.transform(test)
 
+## Evaluating the Model
+A regression evaluator is used to calculate the root mean squared error of the model. A low rmse score is preferred to a higher one. 
 
+evaluator=RegressionEvaluator(metricName="rmse",labelCol="rating",predictionCol="prediction")
+print("Root-mean squared error = "+str(rmse))
+
+The script is built to print the rmse as it runs, as shown above. You can also print predictions for a particular number of users as shown below.
+
+users=training.select(als.getUserCol()).distinct().limit(3)
+
+userSubsetRecs=model.recommendForUserSubset(users,10)
+
+userSubsetRecs.show(truncate=False)
